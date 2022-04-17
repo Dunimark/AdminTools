@@ -1,11 +1,11 @@
 ﻿@page "/profiles"
-@inject HttpClient Http
+@inject HttpClient _http
 
 <PageTitle>Profiles</PageTitle>
 
 <h3>Profiles</h3>
 
-@if (profiles == null)
+@if (_profiles == null)
 {
     <p>
         <em>Loading...</em>
@@ -22,12 +22,12 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var prof in profiles)
+        @foreach (var prof in _profiles)
         {
             <tr>
-                <td>@prof.rmtPC</td>
+                <td>@prof.RmtPc</td>
                 <td>@prof.ProfileList</td>
-                <td>@prof.ProfileGUID</td>
+                <td>@prof.ProfileGuid</td>
             </tr>
         }
         </tbody>
@@ -37,20 +37,20 @@ else
 @code {
 
 
-    private Profile[]? profiles;
+    private Profile[]? _profiles;
 
     protected override async Task OnInitializedAsync()
     {
-        profiles = await Http.GetFromJsonAsync<Profile[]>("sample-data/profiles.json");
+        _profiles = await _http.GetFromJsonAsync<Profile[]>("sample-data/profiles.json");
     }
 
     public class Profile
     {
-        public string? rmtPC { get; set; }
+        public string? RmtPc { get; set; }
 
         public string? ProfileList { get; set; }
 
-        public string? ProfileGUID { get; set; }
+        public string? ProfileGuid { get; set; }
     }
 
 }

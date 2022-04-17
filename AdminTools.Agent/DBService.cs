@@ -1,5 +1,8 @@
-﻿namespace AdminTools.Agent;
+﻿using MySql.Data;
+using MySql.Data.MySqlClient;
 
-public class DBService
+namespace AdminTools.Agent;
+
+public class DbService
 {
 }

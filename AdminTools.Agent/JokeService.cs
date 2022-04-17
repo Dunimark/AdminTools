@@ -5,10 +5,10 @@ namespace AdminTools.Agent;
 
 public class JokeService
 {
-    public static string ProfileListPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList";
-    public static string ProfileGUIDPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileGUID";
+    private static string _profileListPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList";
+    private static string _profileGuidPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileGUID";
 
-    public static string hostname = Environment.MachineName;
+    private static string _hostname = Environment.MachineName;
 
     // Programming jokes borrowed from:
     // https://github.com/eklavyadev/karljoke/blob/main/source/jokes.json
@@ -44,11 +44,11 @@ public class JokeService
         new Joke("3 SQL statements walk into a NoSQL bar. Soon, they walk out", "They couldn't find a table.")
     };
 
-    private string _profGUID = "";
+    private string _profGuid = "";
     private string _profList = "";
 
-    private string? rjoke;
-    private string username = "";
+    private string? _rjoke;
+    private string _username = "";
 
     public string GetJoke()
     {
@@ -59,25 +59,25 @@ public class JokeService
 
     public void CreateJson()
     {
-        var rkpl = Registry.LocalMachine.OpenSubKey(ProfileListPath);
-        var rkpg = Registry.LocalMachine.OpenSubKey(ProfileGUIDPath);
+        var rkpl = Registry.LocalMachine.OpenSubKey(_profileListPath);
+        var rkpg = Registry.LocalMachine.OpenSubKey(_profileGuidPath);
 
-        var jsonfile = "profile-" + hostname + ".json";
+        var jsonfile = "profile-" + _hostname + ".json";
 
         List<Profile> prList;
         List<string> proList;
-        List<string> proGUID;
+        List<string> proGuid;
         prList = new List<Profile>();
         proList = new List<string>();
-        proGUID = new List<string>();
+        proGuid = new List<string>();
 
-        Regis.getProfileList(rkpl, proList);
-        Regis.getProfileGUID(rkpg, proGUID);
+        Regis.GetProfileList(rkpl, proList);
+        Regis.GetProfileGuid(rkpg, proGuid);
 
-        foreach (var vpg in proGUID)
+        foreach (var vpg in proGuid)
         {
             var pGuid = vpg;
-            _profGUID = pGuid;
+            _profGuid = pGuid;
         }
 
         foreach (var vpl in proList)
@@ -88,10 +88,10 @@ public class JokeService
 
         var prof = new Profile
         {
-            rmtPC = hostname,
-            user = "null",
+            RmtPc = _hostname,
+            User = "null",
             ProfileList = _profList,
-            ProfileGUID = _profGUID
+            ProfileGuid = _profGuid
         };
 
         prList.Add(prof);
@@ -101,5 +101,5 @@ public class JokeService
         File.WriteAllText(jsonfile, json);
     }
 
-    public record Joke(string Setup, string Punchline);
+    private record Joke(string Setup, string Punchline);
 }
