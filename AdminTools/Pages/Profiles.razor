@@ -1,0 +1,56 @@
+﻿@page "/profiles"
+@inject HttpClient Http
+
+<PageTitle>Profiles</PageTitle>
+
+<h3>Profiles</h3>
+
+@if (profiles == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>rmtPC</th>
+            <th>ProfileList</th>
+            <th>ProfileGUID</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var prof in profiles)
+        {
+            <tr>
+                <td>@prof.rmtPC</td>
+                <td>@prof.ProfileList</td>
+                <td>@prof.ProfileGUID</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+
+    private Profile[]? profiles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        profiles = await Http.GetFromJsonAsync<Profile[]>("sample-data/profiles.json");
+    }
+
+    public class Profile
+    {
+        public string? rmtPC { get; set; }
+
+        public string? ProfileList { get; set; }
+
+        public string? ProfileGUID { get; set; }
+    }
+
+}
